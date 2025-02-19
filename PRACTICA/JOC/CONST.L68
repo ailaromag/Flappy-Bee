@@ -1,0 +1,114 @@
+00002986 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 12/11/2024 11:11:29
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * GAME CONSTANTS
+00000000                             3  *-----------------------------------------------------------
+00000000                             4              
+00000000                             5  ; --- BEE RELATED CONSTANTS -------------------------------
+00000000                             6  
+00000000  =00000020                  7  BEEWIDTH        EQU     32          ; WIDTH OF 16 PIXELS        
+00000000  =00000014                  8  BEEHEIGH        EQU     20           ; HEIGH OF 8 PIXELS
+00000000  =0000FFFF                  9  BEEPCOL         EQU     $0000FFFF   ; PEN COLOR (YELLOW)
+00000000  =0000FFFF                 10  BEEFCOL         EQU     $0000FFFF   ; FILL COLOR (YELLOW) 
+00000000  =00000007                 11  BEESPEED        EQU     7           ; MAGNITUDE OF THE Y DISPLACEMENT
+00000000  =00000009                 12  GRAVITY         EQU     9           ; MAGNITUDE OF THE Y GRAVITY (ALWAYS POSITIVE)
+00000000  =00000030                 13  BEEPOSX         EQU     48          ; X POSITION 
+00000000  =00000050                 14  BEEMAXJMP       EQU     80          ; MAXIMUM HEIGH OF BEE JUMP
+00000000  =00000001                 15  BEEDECC         EQU     1           ; BEE DECELERATION
+00000000  =0000000C                 16  WINGWIDTH       EQU     12          ; BEE WING WIDTH
+00000000  =00000018                 17  WINGHEIGH1      EQU     24          ; BEE WING EXTENDED HEIGHT
+00000000  =00000006                 18  WINGHEIGH2      EQU     6           ; BEE WING CLOSED HEIGHT
+00000000  =00808080                 19  WINGCOL         EQU     $00808080   ; BEE COLOR GREY
+00000000  =00000001                 20  ACC             EQU     $00000001   ; BEE FALLING ACCELERATION
+00000000                            21  
+00000000                            22  
+00000000                            23  ; --- COLUMN RELATED CONSTANTS --------------------------------
+00000000                            24  
+00000000  =00000030                 25  COLWIDTH        EQU     48          ; WIDTH OF COLUMN 12 PIXELS
+00000000  =000000C8                 26  COLGAP          EQU     200         ; HEIGH OF THE GAP BETWEEN THE COLUMNS    
+00000000  =00000000                 27  COLPOSY         EQU     0           ; Y POSITION
+00000000  =00000002                 28  COLSPEED        EQU     2           ; MAGNITUDE OF THE X DISPLACEMENT
+00000000  =00004B96                 29  COLPCOL         EQU     $00004b96   ; COL CONTOUR COLOR
+00000000  =00004B96                 30  COLFCOL         EQU     $00004b96   ; COL FILL COLOR
+00000000  =00174164                 31  COLDETCOL       EQU     $00174164   ; COL DETAIL LINES COLOR
+00000000                            32  
+00000000                            33  
+00000000                            34  ; --- HONEY BALL RELATED CONSTANTS ---------------------------------
+00000000                            35  
+00000000  =0000003C                 36  HONSIZE         EQU     60           ; HONEY BALL DIAMETER    
+00000000  =000F72DC                 37  HONPCOL         EQU     $000F72DC    ; DARK YELLOW COLOR
+00000000  =001B9CE0                 38  HONFCOL         EQU     $001B9CE0    ; YELLOW COLOR
+00000000  =00000064                 39  HONSCORE        EQU     100          ; HONEY BALL POINTS
+00000000  =00000005                 40  HONNFRAG        EQU     5            ; NUMBER OF FRAGMENTS IN EXPLOSION
+00000000                            41  
+00000000                            42  
+00000000                            43  
+00000000                            44  ; --- SCOREBOARD RELATED CONSTANTS ----------------------------
+00000000                            45  
+00000000  =00000000                 46  SCOFCOL         EQU     $00000000   ; TEXT BACKGROUND COLOR
+00000000  =00000101                 47  SCOLINE1        EQU     $0101       ; FIRST TEXT LINE COORDINATES
+00000000  =00000102                 48  SCOLINE2        EQU     $0102       ; SECOND TEXT LINE COORDINATES
+00000000  =00000103                 49  SCOLINE3        EQU     $0103       ; THIRD TEXT LINE COORDINATES
+00000000                            50  
+00000000                            51  ; --- STATE RELATED CONSTANTS ---------------------------------
+00000000                            52  
+00000000  =FFFFFFFF                 53  STANONE         EQU     -1          ; NON-EXISTENT STATE NUMBER
+00000000  =000000FA                 54  ISCMAXTM        EQU     250         ; INTRO SCREEN WAITNING CYCLES
+00000000  =000000FA                 55  INSMAXTM        EQU     250         ; INSTRUCTIONS SCREEN WAITING CYCLES
+00000000                            56  
+00000000                            57  ; --- VICTORY/DEFEAT CONSTANTS --------------------------------
+00000000                            58  ********************CHANGE IN THE FUTURE************************
+00000000  =00000007                 59  LEVLMAX          EQU     7           ; NUM MAXIM OF COLUMNS PASSED
+00000000  =00000001                 60  COLLMAX         EQU     1           ; NUMBER MAXIMUM COLLISIONS
+00000000                            61  
+00000000                            62  
+00000000                            63  
+00000000                            64  
+00000000                            65  
+00000000                            66  
+Line 67 WARNING: END directive missing, starting address not set
+
+No errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+ACC                 1
+BEEDECC             1
+BEEFCOL             FFFF
+BEEHEIGH            14
+BEEMAXJMP           50
+BEEPCOL             FFFF
+BEEPOSX             30
+BEESPEED            7
+BEEWIDTH            20
+COLDETCOL           174164
+COLFCOL             4B96
+COLGAP              C8
+COLLMAX             1
+COLPCOL             4B96
+COLPOSY             0
+COLSPEED            2
+COLWIDTH            30
+GRAVITY             9
+HONFCOL             1B9CE0
+HONNFRAG            5
+HONPCOL             F72DC
+HONSCORE            64
+HONSIZE             3C
+INSMAXTM            FA
+ISCMAXTM            FA
+LEVLMAX             7
+SCOFCOL             0
+SCOLINE1            101
+SCOLINE2            102
+SCOLINE3            103
+STANONE             FFFFFFFF
+WINGCOL             808080
+WINGHEIGH1          18
+WINGHEIGH2          6
+WINGWIDTH           C
