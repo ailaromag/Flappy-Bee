@@ -1,0 +1,310 @@
+0000A9E0 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 10/1/2025 16:20:00
+
+00000000                             1  ; ==============================================================================
+00000000                             2  ; INTRO MANAGEMENT
+00000000                             3  ; ==============================================================================
+00000000                             4              
+00000000                             5  ; ------------------------------------------------------------------------------
+00000000                             6  ISCINIT
+00000000                             7  ; INTRO SCREEN INIT
+00000000                             8  ; INPUT    : NONE 
+00000000                             9  ; OUTPUT   : NONE
+00000000                            10  ; MODIFIES : NONE
+00000000                            11  ; ------------------------------------------------------------------------------
+00000000                            12  *            ; INICIALITZAM EL TIMER
+Line 13 ERROR: Undefined symbol
+00000000  4279 004DBD16             13              CLR.W   (ISCTIMER)      
+00000006  4E75                      14              RTS
+00000008                            15              
+00000008                            16  ; ------------------------------------------------------------------------------
+00000008                            17  ISCUPD
+00000008                            18  ; INTRO SCREEN UPDATE
+00000008                            19  ; INPUT    : NONE 
+00000008                            20  ; OUTPUT   : NONE
+00000008                            21  ; MODIFIES : NONE
+00000008                            22  ; ------------------------------------------------------------------------------
+00000008                            23              
+00000008  48E7 4100                 24              MOVEM.L D1/D7,-(A7)
+0000000C                            25             
+0000000C                            26              
+Line 27 ERROR: Undefined symbol
+0000000C  2239 004DBD16             27              MOVE.L  (KBDEDGE),D1           
+00000012  0801 0018                 28              BTST.L  #24,D1          ;TEST FOR SPACE KEY
+00000016  6700 0010                 29              BEQ     .CONT
+Line 30 ERROR: Undefined symbol
+0000001A  1E3C 0016                 30              MOVE.B #SNDSELECT,D7    ;SELECTION SOUND
+Line 31 ERROR: Undefined symbol
+0000001E  4E46                      31              TRAP   #SNDPLTN
+Line 32 ERROR: Undefined symbol
+00000020  33FC 0002 005455C8        32              MOVE.W  #2,(STANEXT)    ;PASSAM AL SEGÜENT ESTAT
+00000028                            33   
+00000028                            34              
+Line 35 ERROR: Undefined symbol
+00000028  5279 005455B8             35  .CONT       ADDQ.W  #1,(ISCTIMER)
+Line 36 ERROR: Undefined symbol
+0000002E  0C79 BD16 005455B8        36              CMP.W   #ISCMAXTM,(ISCTIMER)
+00000036  6D00 000A                 37              BLT     .DONE
+Line 38 ERROR: Undefined symbol
+0000003A  33FC 0001 005455B8        38              MOVE.W  #1,(STANEXT)
+00000042  4CDF 0082                 39  .DONE       MOVEM.L (A7)+,D1/D7   
+00000046  4E75                      40              RTS            
+00000048                            41  *; ------------------------------------------------------------------------------
+00000048                            42  *ISCUPD
+00000048                            43  *; INTRO SCREEN UPDATE
+00000048                            44  *; INPUT    : NONE 
+00000048                            45  *; OUTPUT   : NONE
+00000048                            46  *; MODIFIES : NONE
+00000048                            47  *; ------------------------------------------------------------------------------
+00000048                            48  *            
+00000048                            49  *            MOVEM.L D1/D7,-(A7)       
+00000048                            50  *            
+00000048                            51  *            MOVE.L  (KBDEDGE),D1           
+00000048                            52  *            BTST.L  #24,D1          ;COMPROVAM TECLA ESPAI
+00000048                            53  *            BEQ     .CONT
+00000048                            54  **            MOVE.B #SNDSELECT,D7    ;SO DE SELECCIO
+00000048                            55  **            TRAP   #SNDPLTN
+00000048                            56  *            MOVE.W  #1,(STANEXT)    ;PASSAM AL SEGÜENT ESTAT
+00000048                            57  *            
+00000048                            58  **             ; COMPROVAM SI S'HA CLICAT EL MOUSE
+00000048                            59  **            MOVE.W  (MSEVAL),D2   
+00000048                            60  **            CMP.W   #1,D2               ; TEST PER CLICK
+00000048                            61  **            BEQ     .CLICKED
+00000048                            62  **            BRA     .NOT_CLICKED           
+00000048                            63  **.CLICKED      
+00000048                            64  **            ; COMPROVAM LA POSICIÓ DEL CLICK
+00000048                            65  **
+00000048                            66  **            
+00000048                            67  **            MOVE.W  (BTNPOSX0),D3               ; COORD X HONEY
+00000048                            68  **            ADD.W   #BTNWIDTH,D3                 ; X RIGHT BOUNDARY                       
+00000048                            69  **            CMP.W   (MSECOORD+2),D3       ; COORD X POSITIVA
+00000048                            70  **            
+00000048                            71  **            BLT     .NOT_CLICKED  
+00000048                            72  **            MOVE.W  (BTNPOSX0),D3
+00000048                            73  **            CMP.W   (MSECOORD+2),D3       ; COORD X NEGATIVA
+00000048                            74  **            BGT     .NOT_CLICKED
+00000048                            75  **            
+00000048                            76  **            MOVE.W  (BTNPOSY0),D5              ; COORD Y HONEY
+00000048                            77  **            ADD.W   #BTNHEIGH,D5                 ; LOW Y BOUNDARY
+00000048                            78  **            CMP.W   (MSECOORD),D5
+00000048                            79  **            BLT     .NOT_CLICKED
+00000048                            80  **            MOVE.W  (BTNPOSY0),D5              ; COORD Y HONEY
+00000048                            81  **            CMP.W   (MSECOORD),D5
+00000048                            82  **            BGT     .NOT_CLICKED
+00000048                            83  **            
+00000048                            84  **            MOVE.W  #2,(STANEXT)
+00000048                            85  **
+00000048                            86  *             
+00000048                            87  *.NOT_CLICKED         
+00000048                            88  ******************************************************
+00000048                            89  *.CONT       ADDQ.W  #1,(ISCTIMER)
+00000048                            90  *            CMP.W   #ISCMAXTM,(ISCTIMER)
+00000048                            91  *            BLT     .DONE
+00000048                            92  *            MOVE.W  #1,(STANEXT)
+00000048                            93  *
+00000048                            94  *    
+00000048                            95  *.DONE       MOVEM.L (A7)+,D1/D7   
+00000048                            96  *            RTS
+00000048                            97  *            
+00000048                            98  ; ------------------------------------------------------------------------------
+00000048                            99  ISCPLOT
+00000048                           100  ;INTRO SCREEN PLOT
+00000048                           101  ; INPUT    : NONE 
+00000048                           102  ; OUTPUT   : NONE
+00000048                           103  ; MODIFIES : NONE
+00000048                           104  ; ------------------------------------------------------------------------------
+00000048  48E7 FFC0                105              MOVEM.L D0-D7/A0-A1,-(A7)
+0000004C                           106                                       
+0000004C                           107              ;INICIALITZAM LES VARIABLES DEL BITMAP:
+Line 108 ERROR: Comma expected
+0000004C                           108              MOVE.W  #SCRWIDTH/2-128,(POSXINI)
+Line 109 ERROR: Comma expected
+0000004C                           109              MOVE.W  #SCRHEIGH/2+128,(POSYINI)
+Line 110 ERROR: Undefined symbol
+0000004C  33FC 0004 005455B8       110              MOVE.W  #4,(PIXSIZE)
+Line 111 ERROR: Undefined symbol
+00000054  33FC 0040 005455B8       111              MOVE.W  #64,(BMPHEIG)
+Line 112 ERROR: Undefined symbol
+0000005C  33FC 0040 005455B8       112              MOVE.W  #64,(BMPWIDT)
+00000064                           113               
+Line 114 ERROR: Undefined symbol
+00000064  43F9 004DBD16            114              LEA    BEEMAP,A1                ; DIBUIXAM L'ABELLA
+Line 115 ERROR: Undefined symbol
+0000006A  4EB9 004DBD16            115              JSR    MAPPLOT
+00000070                           116  
+00000070  223C 00711DB0            117              MOVE.L  #$711DB0,D1
+00000076  103C 0051                118              MOVE.B  #81,D0
+0000007A  4E4F                     119              TRAP    #15
+0000007C  103C 0050                120              MOVE.B  #80,D0
+00000080  4E4F                     121              TRAP    #15
+00000082                           122              
+00000082                           123              ; DIBUIXAM EL LOGO. 
+Line 124 ERROR: Undefined symbol
+00000082  41F9 004DBD16            124              LEA     IMGLIST,A0
+Line 125 ERROR: Invalid syntax
+00000088                           125              MOVE.W  #(SCRWIDTH-345)/2,D5    ; DEFINIM LA POSICIO X
+Line 126 ERROR: Comma expected
+00000088                           126              MOVE.W  #SCRHEIGH/2-250,D6      ; DEFINIM LA POSICIO Y, ADALT DE LA PANTALLA
+00000088  3E3C 0000                127              MOVE.W  #0,D7
+Line 128 ERROR: Undefined symbol
+0000008C  4EB9 004DBD16            128              JSR     POLYIMGID                 
+00000092                           129     
+Line 130 ERROR: Comma expected
+00000092                           130              MOVE.W  #(SCRWIDTH)/2,D5        
+Line 131 ERROR: Comma expected
+00000092                           131              MOVE.W  #SCRHEIGH-150,D6        ; POSICIO Y, ABAIX DE LA PANTALLA
+00000092  3E3C 0001                132              MOVE.W  #1,D7
+Line 133 ERROR: Undefined symbol
+00000096  4EB9 004DBD16            133              JSR     POLYIMGID                         
+0000009C                           134             
+Line 135 ERROR: Undefined symbol
+0000009C  223C 004DBD16            135              MOVE.L  #HONPCOL,D1
+000000A2  103C 0051                136              MOVE.B  #81,D0
+000000A6  4E4F                     137              TRAP    #15
+000000A8  103C 0050                138              MOVE.B  #80,D0
+000000AC  4E4F                     139              TRAP    #15
+000000AE                           140              
+000000AE                           141              ;DIBUIXAM EL SOMBREJAT DE "BEE"
+Line 142 ERROR: Undefined symbol
+000000AE  41F9 004DBD16            142              LEA     IMGLIST,A0
+Line 143 ERROR: Comma expected
+000000B4                           143              MOVE.W  #(SCRWIDTH)/2-4,D5      ; DESPLAÇAM 4 PIXELS EL LOGO RESPECTE A L'ALTRE 'BEE'   
+Line 144 ERROR: Comma expected
+000000B4                           144              MOVE.W  #SCRHEIGH-154,D6      
+000000B4  3E3C 0001                145              MOVE.W  #1,D7
+Line 146 ERROR: Undefined symbol
+000000B8  4EB9 004DBD16            146              JSR     POLYIMGID
+000000BE                           147    
+000000BE  4EB9 00000156            148              JSR     BTTNPLOT ***********************************DIBUIXAM EL BOTO DE INSTRUCCIONS
+000000C4                           149  
+000000C4                           150              
+000000C4  4281                     151              CLR.L   D1
+000000C6  103C 0051                152              MOVE.B  #81,D0
+000000CA  4E4F                     153              TRAP    #15
+000000CC                           154  
+000000CC                           155              
+Line 156 ERROR: Undefined symbol
+000000CC  0839 0003 005455C8       156              BTST.B  #3,(SCRCYCCT)            ;IMPLEMENTAM EL PARPADEIG (DE 8 EN 8 CICLES)
+000000D4  6700 0050                157              BEQ     .DONE
+000000D8                           158              
+000000D8                           159              ; DEFINIM PROPIETATS DE LA FONT
+000000D8  223C 00FFFFFF            160              MOVE.L  #$00FFFFFF,D1
+000000DE  243C 040C0000            161              MOVE.L  #$040C0000,D2
+000000E4  103C 0015                162              MOVE.B  #21,D0
+000000E8  4E4F                     163              TRAP    #15
+000000EA                           164              
+000000EA  41F9 0000013D            165              LEA     .TXT2,A0
+000000F0  103C 001D                166              MOVE.B  #29,D0
+000000F4  143C 0001                167              MOVE.B  #1,D2                   ;INDICAM EL TAMANY 1
+Line 168 ERROR: Undefined symbol
+000000F8  4EB9 004DBD16            168              JSR     UTLPRINT
+000000FE                           169              
+Line 170 ERROR: Symbol value differs between first and second pass
+000000FE  4CDF 03FF                170  .DONE       MOVEM.L (A7)+,D0-D7/A0-A1
+00000102  4E75                     171              RTS
+00000104                           172              
+00000104                           173  
+Line 174 ERROR: Symbol value differs between first and second pass
+00000104= 46 4C 41 50 50 59 ...    174  .TXT1       DC.B    'FLAPPY BEE 68000',0
+Line 175 ERROR: Symbol value differs between first and second pass
+00000114= 50 52 45 53 53 20 ...    175  .TXT2       DC.B    'PRESS SPACE KEY TO START',0 
+0000012C                           176              DS.W    0           
+0000012C                           177  
+0000012C                           178  
+0000012C                           179  
+0000012C                           180  
+0000012C                           181  
+0000012C                           182  ; ------------------------------------------------------------------------------
+Line 183 ERROR: Symbol value differs between first and second pass
+0000012C                           183  BTTNPLOT
+0000012C                           184  ; BUTTON PLOT
+0000012C                           185  ; INPUT    : NONE 
+0000012C                           186  ; OUTPUT   : NONE
+0000012C                           187  ; MODIFIES : NONE
+0000012C                           188  ; ------------------------------------------------------------------------------
+0000012C  48E7 F800                189          MOVEM.L D0-D4,-(A7)
+00000130                           190  
+00000130  223C 00F000AC            191          MOVE.L  #$F000AC,D1
+00000136  103C 0050                192          MOVE.B  #80,D0
+0000013A  4E4F                     193          TRAP    #15
+0000013C  103C 0051                194          MOVE.B  #81,D0
+00000140  4E4F                     195          TRAP    #15
+00000142                           196    
+Line 197 ERROR: Comma expected
+00000142                           197          MOVE.W  #SCRWIDTH/4-BTNWIDTH/2,D1
+Line 198 ERROR: Undefined symbol
+00000142  33C1 005455D4            198          MOVE.W  D1,(BTNPOSX0)               ;GUARDAM LA POSICIO X INICIAL DEL BOTO
+00000148  3601                     199          MOVE.W  D1,D3
+Line 200 ERROR: Undefined symbol
+0000014A  0643 BD16                200          ADD.W   #BTNWIDTH,D3
+Line 201 ERROR: Comma expected
+0000014E                           201          MOVE.W  #SCRHEIGH-SCRHEIGH/5,D2
+Line 202 ERROR: Undefined symbol
+0000014E  33C2 005455D4            202          MOVE.W  D2,(BTNPOSY0)               ;GUARDAM LA POSICIO Y INICIAL DEL BOT
+00000154  3802                     203          MOVE.W  D2,D4
+Line 204 ERROR: Undefined symbol
+00000156  0644 BD16                204          ADD.W   #BTNHEIGH,D4
+0000015A  103C 0057                205          MOVE.B  #87,D0
+0000015E  4E4F                     206          TRAP    #15
+00000160                           207          
+00000160                           208          ************************* ADD THE INSTRUCTIONS TEXT!!!!!
+00000160                           209  *        ; WRITE THE TEXT
+00000160                           210  *         ; SET FONT PROPERTIES
+00000160                           211  *        MOVE.L  #$00FFFFFF,D1
+00000160                           212  *        MOVE.L  #$040C0000,D2
+00000160                           213  *        MOVE.B  #21,D0
+00000160                           214  *        TRAP    #15
+00000160                           215  *        
+00000160                           216  *        
+00000160                           217  *        ; SET THIRD LINE POSITION
+00000160                           218  *            MOVE.B  #11,D0
+00000160                           219  *            MOVE.W  #SCOLINE3,D1
+00000160                           220  *            TRAP    #15
+00000160                           221  *            
+00000160                           222  *        LEA     .TXT0,A0
+00000160                           223  *        MOVE.B  #17,D0
+00000160                           224  *        TRAP    #15
+00000160                           225  
+00000160                           226          
+00000160                           227          
+00000160  4CDF 001F                228          MOVEM.L (A7)+,D0-D4
+00000164  4E75                     229          RTS
+00000166                           230          
+Line 231 ERROR: Symbol value differs between first and second pass
+00000166= 49 4E 53 54 52 55 ...    231  .TXT0       DC.B    'INSTRUCTIONS',0
+00000172                           232  
+00000172                           233  
+00000172                           234  
+00000172                           235  
+00000172                           236  
+00000172                           237  
+00000172                           238  
+00000172                           239  
+00000172                           240  
+00000172                           241  
+00000172                           242  
+00000172                           243  
+00000172                           244  
+00000172                           245  
+00000172                           246  
+00000172                           247  
+Line 248 WARNING: END directive missing, starting address not set
+
+40 errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+BTTNPLOT            156
+BTTNPLOT:TXT0       198
+ISCINIT             0
+ISCPLOT             48
+ISCPLOT:DONE        126
+ISCPLOT:TXT1        12C
+ISCPLOT:TXT2        13D
+ISCUPD              8
+ISCUPD:CONT         28
+ISCUPD:DONE         42

@@ -1,0 +1,253 @@
+000075C4 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 20/11/2024 10:24:25
+
+00000000                             1  ; ==============================================================================
+00000000                             2  ; HONEYBALL MANAGEMENT (AGENT)
+00000000                             3  ; (W) +0 X COORDINATE --> A0     ; DEFINIM ELS OFFSETS DE LA MEMORIA LOCAL (DE INSTÀNCIA)
+00000000                             4  ; (W) +2 Y COORDINATE --> 2(A0)
+00000000                             5  ; (W) +4 BALL DIAMETER--> 4(A0)
+00000000                             6  ; (W) +4 BALL STATE   --> 8(A0)
+00000000                             7  ; ==============================================================================
+00000000                             8    
+00000000                             9   
+00000000                            10  ; -----------------------------------------------------------------------------
+00000000                            11  HONINIT
+00000000                            12  ; INITALIZES A HONEY BALL
+00000000                            13  ; INPUT    - A0 POINTER TO THE LOCAL MEMORY
+00000000                            14  ; OUTPUT   - NONE
+00000000                            15  ; MODIFIES - NONE
+00000000                            16  ; NOTE     - ASSUMES SCRHEIGH IS GREATER THAN 255
+00000000                            17  ; -----------------------------------------------------------------------------
+00000000  3F00                      18              MOVE.W  D0,-(A7)            
+Line 19 ERROR: Invalid syntax
+00000002                            19              MOVE.W  #SCRWIDTH+SCRWIDTH/5-HONSIZE/2,(A0)
+00000002                            20          ;    MOVE.W  #SCRWIDTH/2,(A0)
+Line 21 ERROR: Comma expected
+00000002                            21              MOVE.W  #SCRHEIGH/4,2(A0)          
+Line 22 ERROR: Undefined symbol
+00000002  317C BD16 0004            22              MOVE.W  #HONSIZE,4(A0)
+00000008                            23              
+00000008  4268 0008                 24              CLR.W    8(A0)          ; LA BOLA ESTA DISMINUYENDO
+0000000C                            25  
+0000000C  301F                      26              MOVE.W  (A7)+,D0
+0000000E  4E75                      27              RTS
+00000010                            28   
+00000010                            29   ; -----------------------------------------------------------------------------
+Line 30 ERROR: Symbol value differs between first and second pass
+00000010                            30  HONUPD
+00000010                            31  ; UPDATES A HONEY BALL
+00000010                            32  ; INPUT    - A0 POINTER TO THE LOCAL MEMORY
+00000010                            33  ; OUTPUT   - NONE
+00000010                            34  ; MODIFIES - NONE
+00000010                            35  ; -----------------------------------------------------------------------------
+00000010  48E7 FE00                 36              MOVEM.L  D0-D6,-(A7)
+00000014                            37              
+00000014                            38              
+00000014  3010                      39              MOVE.W  (A0),D0
+00000016  3C28 0002                 40              MOVE.W  2(A0),D6        ; Y INITIAL COORDINATE
+Line 41 ERROR: Undefined symbol
+0000001A  0440 BD16                 41              SUB.W   #HONSPEED,D0  ;MOVES TO THE LEFT
+0000001E                            42              
+0000001E                            43               ; CHECK HORIZONTAL COLLISIONS (LEFT SIDE OF THE SCREEN)
+0000001E  3228 0004                 44              MOVE.W  4(A0),D1
+00000022  4441                      45              NEG.W   D1
+00000024  B041                      46              CMP.W   D1,D0
+00000026  6D00 0010                 47              BLT     .COLLFT
+0000002A  6000 0016                 48              BRA     .CONTINUE
+Line 49 ERROR: Symbol value differs between first and second pass
+0000002E                            49  .COLLFT     ; LEFT SIDE COLLISION
+Line 50 ERROR: Undefined symbol
+0000002E  4EB9 004DBD16             50              JSR     AGLKILL             ; ELIMINAM LA COLUMNA
+00000034  6000 00C2                 51              BRA     .END
+00000038                            52  
+Line 53 ERROR: Symbol value differs between first and second pass
+00000038                            53  .CONTINUE            
+00000038                            54              ; UPDATE SIZE
+00000038  3428 0004                 55              MOVE.W  4(A0),D2  
+0000003C                            56              ; CHECK IF ITS GROWING OR DIMINISHING
+0000003C  0268 00FF 0008            57              AND.W   #$FF,8(A0)
+00000042  6600 002C                 58              BNE     .AUMENTAR_BOLA
+00000046                            59  
+00000046                            60  ;DISMINUIR:
+Line 61 ERROR: Undefined symbol
+00000046  B47C BD16                 61              CMP.W   #HONMINSIZE,D2
+0000004A  6E00 0018                 62              BGT     .RESTAR        ; THE HONEY BALL IS TO SMALL, IT HAS TO GROW
+0000004E  317C 00FF 0008            63              MOVE.W  #$FF,8(A0)
+00000054  4EF9 00000088             64              JMP     .DONE
+0000005A                            65              
+Line 66 ERROR: Symbol value differs between first and second pass
+0000005A                            66  .RESTAR     SUB.W   #2,D2
+0000005A                            67              ; UPDATE X INITIAL COORDINATE
+0000005A  5240                      68              ADD.W   #1,D0
+0000005C  5246                      69              ADD.W   #1,D6
+0000005E  4EF9 00000088             70              JMP     .DONE            
+00000064                            71  
+Line 72 ERROR: Symbol value differs between first and second pass
+00000064                            72  .AUMENTAR_BOLA
+Line 73 ERROR: Undefined symbol
+00000064  B47C BD16                 73              CMP.W   #HONMAXSIZE,D2
+00000068  6D00 0018                 74              BLT     .SUMAR
+0000006C  4268 0008                 75              CLR.W   8(A0)           ; LA BOLA ESTA EN "DECREMENTO"
+00000070  4EF9 00000088             76              JMP     .DONE
+Line 77 ERROR: Symbol value differs between first and second pass
+00000076                            77  .SUMAR            
+00000076  5442                      78              ADD.W   #2,D2
+00000078  5340                      79              SUB.W   #1,D0
+0000007A  5346                      80              SUB.W   #1,D6
+0000007C                            81              ;WE UPDATE THE X AND Y INITIAL COORDINATES
+0000007C                            82            
+0000007C                            83  
+Line 84 ERROR: Symbol value differs between first and second pass
+0000007C                            84  .DONE           
+0000007C                            85              ; CHECK MOUSE CLICK ON HONEY
+Line 86 ERROR: Undefined symbol
+0000007C  3239 004DBD16             86              MOVE.W  (MSEVAL),D1   
+00000082  B27C 0001                 87              CMP.W   #1,D1       ; TEST FOR CLICK
+00000086  6700 0012                 88              BEQ     .KILL
+0000008A  6000 0062                 89              BRA     .NOT_KILL           
+Line 90 ERROR: Symbol value differs between first and second pass
+0000008E                            90  .KILL       
+0000008E                            91              ; WE NEED TO CHECK THE POSITION OF THE CLICK
+0000008E                            92  
+0000008E                            93              
+0000008E  3610                      94              MOVE.W  (A0),D3               ; COORD X HONEY
+00000090  3828 0004                 95              MOVE.W  4(A0),D4              ; HONEY DIAMETER
+00000094  D644                      96              ADD.W   D4,D3                 ; X RIGHT BOUNDARY                       
+Line 97 ERROR: Invalid syntax
+00000096                            97              CMP.W   (MSECOORD+2),D3       ; COORD X POSITIVA
+00000096  6D00 0056                 98              BLT     .NOT_KILL  
+0000009A  3610                      99              MOVE.W  (A0),D3
+Line 100 ERROR: Invalid syntax
+0000009C                           100              CMP.W   (MSECOORD+2),D3       ; COORD X NEGATIVA
+0000009C  6E00 0050                101              BGT     .NOT_KILL
+000000A0                           102              
+000000A0  3A28 0002                103              MOVE.W  2(A0),D5                 ; COORD Y HONEY
+000000A4  DA44                     104              ADD.W   D4,D5                   ; LOW Y BOUNDARY
+Line 105 ERROR: Undefined symbol
+000000A6  BA79 004DBD16            105              CMP.W   (MSECOORD),D5
+000000AC  6D00 0040                106              BLT     .NOT_KILL
+000000B0  3A28 0002                107              MOVE.W  2(A0),D5                 ; COORD Y HONEY
+Line 108 ERROR: Undefined symbol
+000000B4  BA79 004DBD16            108              CMP.W   (MSECOORD),D5
+000000BA  6E00 0032                109              BGT     .NOT_KILL
+000000BE                           110              
+000000BE                           111      
+000000BE                           112  
+Line 113 ERROR: Undefined symbol
+000000BE  4EB9 004DBD16            113              JSR     AGLKILL               ; HONEY KILL
+000000C4  4EB9 00000138            114              JSR     HONXPLO
+Line 115 ERROR: Undefined symbol
+000000CA  0679 BD16 005455B8       115              ADD.W   #HONBONUS,(POINTS)
+000000D2                           116              
+000000D2  6000 0024                117              BRA     .END            
+000000D6                           118            
+000000D6                           119              ; STORE POSITION
+000000D6                           120         
+Line 121 ERROR: Symbol value differs between first and second pass
+000000D6                           121  .NOT_KILL            
+000000D6  3080                     122              MOVE.W  D0,(A0)
+000000D8  3142 0004                123              MOVE.W  D2,4(A0)
+000000DC  3146 0002                124              MOVE.W  D6,2(A0)
+000000E0                           125  
+Line 126 ERROR: Symbol value differs between first and second pass
+000000E0  4CDF 007F                126  .END        MOVEM.L  (A7)+,D0-D6         
+000000E4  4E75                     127              RTS            
+000000E6                           128              
+000000E6                           129              
+000000E6                           130  ; -----------------------------------------------------------------------------
+Line 131 ERROR: Symbol value differs between first and second pass
+000000E6                           131  HONPLOT
+000000E6                           132  ; PLOTS A HONEY BALL
+000000E6                           133  ; INPUT    - A0 POINTER TO THE LOCAL MEMORY
+000000E6                           134  ; OUTPUT   - NONE
+000000E6                           135  ; MODIFIES - NONE
+000000E6                           136  ; -----------------------------------------------------------------------------
+000000E6                           137              
+000000E6  48A7 7800                138              MOVEM.W D1-D4,-(A7)
+000000EA                           139              ;SET PEN COLOR
+000000EA  103C 0050                140              MOVE.B  #80,D0
+Line 141 ERROR: Undefined symbol
+000000EE  223C 004DBD16            141              MOVE.L  #HONPCOL,D1
+000000F4  4E4F                     142              TRAP    #15                        
+000000F6                           143              ;SET FILL COLOR
+000000F6  103C 0051                144              MOVE.B  #81,D0
+Line 145 ERROR: Undefined symbol
+000000FA  223C 004DBD16            145              MOVE.L  #HONFCOL,D1
+00000100  4E4F                     146              TRAP    #15
+00000102                           147              ;DRAW BALL
+00000102  3210                     148              MOVE.W  (A0),D1
+00000104  3428 0002                149              MOVE.W  2(A0),D2
+00000108  3601                     150              MOVE.W  D1,D3
+0000010A  3802                     151              MOVE.W  D2,D4
+0000010C  D668 0004                152              ADD.W  4(A0),D3
+00000110  D868 0004                153              ADD.W  4(A0),D4
+00000114  103C 0058                154              MOVE.B  #88,D0
+00000118  4E4F                     155              TRAP    #15
+0000011A  4C9F 001E                156              MOVEM.W (A7)+,D1-D4
+0000011E  4E75                     157              RTS
+00000120                           158  
+00000120                           159  ; -----------------------------------------------------------------------------
+Line 160 ERROR: Symbol value differs between first and second pass
+00000120                           160  HONXPLO
+00000120                           161  ; EXPLODES A HONEY BALL
+00000120                           162  ; INPUT    - A0 POINTER TO THE LOCAL MEMORY
+00000120                           163  ; OUTPUT   - NONE
+00000120                           164  ; MODIFIES - NONE
+00000120                           165  ; -----------------------------------------------------------------------------
+00000120  48E7 FC70                166              MOVEM.L A1-A3/D0-D5,-(A7)
+Line 167 ERROR: Undefined symbol
+00000124  383C BD16                167              MOVE.W  #HONNFRAG,D4
+Line 168 ERROR: Symbol value differs between first and second pass
+00000128                           168  .LOOP       LEA     XPLINIT,A1
+Line 169 ERROR: Undefined symbol
+00000128  45F9 004DBD16            169              LEA     XPLUPD,A2
+Line 170 ERROR: Undefined symbol
+0000012E  47F9 004DBD16            170              LEA     XPLPLOT,A3
+Line 171 ERROR: Undefined symbol
+00000134  303C BD16                171              MOVE.W  #XPLTYPE,D0
+00000138  3210                     172              MOVE.W  (A0),D1
+Line 173 ERROR: Comma expected
+0000013A                           173              ADD.W   #HONSIZE/2,D1
+0000013A  3428 0002                174              MOVE.W  2(A0),D2
+Line 175 ERROR: Comma expected
+0000013E                           175              ADD.W   #HONSIZE/2,D2
+Line 176 ERROR: Undefined symbol
+0000013E  4EB9 004DBD16            176              JSR     AGLADD
+00000144  51CC FFFA                177              DBRA.W  D4,.LOOP
+Line 178 ERROR: Undefined symbol
+00000148  4EB9 004DBD16            178              JSR     AGLKILL
+0000014E  4CDF 0E3F                179              MOVEM.L (A7)+,A1-A3/D0-D5
+00000152  4E75                     180              RTS
+00000154                           181  
+00000154                           182       
+00000154                           183  
+00000154                           184  
+00000154                           185  
+00000154                           186  
+00000154                           187  
+00000154                           188  
+00000154                           189  
+Line 190 WARNING: END directive missing, starting address not set
+
+37 errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+HONINIT             0
+HONPLOT             FE
+HONUPD              1A
+HONUPD:AUMENTAR_BOLA  70
+HONUPD:COLLFT       38
+HONUPD:CONTINUE     42
+HONUPD:DONE         88
+HONUPD:END          F8
+HONUPD:KILL         9A
+HONUPD:NOT_KILL     EE
+HONUPD:RESTAR       64
+HONUPD:SUMAR        82
+HONXPLO             138
+HONXPLO:LOOP        140

@@ -1,0 +1,76 @@
+00007684 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 20/11/2024 12:37:27
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * GAME VARIABLES
+00000000                             3  *-----------------------------------------------------------
+00000000                             4    
+00000000                             5  ; --- BEE RELATED VARIABLES --------------------------------
+00000000                             6  
+00000000                             7  BEEPOSY     DS.W    1           ; BEE Y COORDINATE       ** CAMBIADO DE .W
+00000002                             8  BEEVELY     DS.L    1           ; BEE INSTANT Y VELOCITY ** CAMBIADO DE .W
+00000006                             9  BEEPOSYJMP  DS.W    1           ; BEE POINT OF REFERENCE 
+00000008                            10                                  ; FOR JUMP 
+00000008                            11  BEEWINGS    DS.W    1           ; IF 0 WINGS UP IF 1 WINGS DOWN
+0000000A                            12  
+0000000A                            13  ; --- SCOREBOARD RELATED VARIABLES -------------------------
+0000000A                            14  
+0000000A                            15  POINTS      DS.W    1           ; NUMBER OF KILLED ENEMIES
+0000000C                            16  LEVEL       DS.W    1           ; NUMBER OF SUCCEDED COLUMNS 
+0000000E                            17  COLLISIONS  DS.W    1           ; NUMBER OF COLLISIONS   
+00000010                            18  
+00000010                            19  ; --- INTRO STATE RELATED VARIABLES ------------------------
+00000010                            20  
+00000010                            21  ISCTIMER    DS.W    1           ; INTRO TIMER
+00000012                            22  
+00000012                            23  ; --- INSTRUCTIONS STATE RELATED VARIABLES ----------------
+00000012                            24  INSTIMER    DS.W    1           ; INSTRUCTIONS TIMER
+00000014                            25  
+00000014                            26  ; --- STATE RELATED VARIABLES ------------------------------
+00000014                            27  
+00000014                            28  STACUR      DS.W    1           ; CURRENT STATE
+00000016                            29  STANEXT     DS.W    1           ; NEXT STATE
+00000018                            30  
+00000018                            31  ; --- BITMAP RELATED VARIABLES -----------------------------
+00000018                            32  POSXINI     DS.W    1           ; BIT X INITIAL COORDINATE
+0000001A                            33  POSYINI     DS.W    1           ; BIT Y INITIAL COORDINATE
+0000001C                            34  BITXPOS     DS.W    1           ; BIT X COORDINATE
+0000001E                            35  BITYPOS     DS.W    1           ; BIT Y COORDINATE
+00000020                            36  PIXSIZE     DS.W    1           ; PIXSIZE
+00000022                            37  BMPWIDT     DS.W    1           ; BITMAP WIDTH
+00000024                            38  BMPHEIG     DS.W    1           ; BITMAP HEIGH
+00000026                            39  
+00000026                            40  
+00000026                            41  
+00000026                            42  
+00000026                            43  
+00000026                            44  
+00000026                            45  
+Line 46 WARNING: END directive missing, starting address not set
+
+No errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+BEEPOSY             0
+BEEPOSYJMP          6
+BEEVELY             2
+BEEWINGS            8
+BITXPOS             1C
+BITYPOS             1E
+BMPHEIG             24
+BMPWIDT             22
+COLLISIONS          E
+INSTIMER            12
+ISCTIMER            10
+LEVEL               C
+PIXSIZE             20
+POINTS              A
+POSXINI             18
+POSYINI             1A
+STACUR              14
+STANEXT             16

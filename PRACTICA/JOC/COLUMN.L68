@@ -1,0 +1,302 @@
+00002946 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 13/11/2024 16:50:19
+
+00000000                             1  ; ==============================================================================
+00000000                             2  ; COLUMN MANAGEMENT (AGENT)
+00000000                             3  ; COLPOSX   (W) +0  --> A0     ; DEFINIM ELS OFFSETS DE LA MEMORIA LOCAL (DE INSTÀNCIA)
+00000000                             4  ; GAPPOSY   (W) +2  --> 2(A0)
+00000000                             5  ; ==============================================================================
+00000000                             6              
+00000000                             7  ; ------------------------------------------------------------------------------
+00000000                             8  COLINIT
+00000000                             9  ; INITIALIZE COLUMN. WE INITIALIZE THE VARIABLES
+00000000                            10  ; INPUT    : A0 POINTER TO THE INSTANCE VARIABLES
+00000000                            11  ; OUTPUT   : NONE
+00000000                            12  ; MODIFIES : NONE
+00000000                            13  ; ------------------------------------------------------------------------------
+00000000                            14              
+00000000  48E7 8040                 15              MOVEM.L D0/A1,-(A7)
+Line 16 ERROR: Undefined symbol
+00000004  30BC BD16                 16              MOVE.W  #SCRWIDTH,(A0)            ; COLOCAM LA COLUMNA A LA DRETA PANTALLA
+00000008                            17                          
+Line 18 ERROR: Undefined symbol
+00000008  4EB9 004DBD16             18              JSR     UTLRAND
+0000000E  C0BC 0000000C             19              AND.L   #$0000000C,D0             ; MÀSCARA PER AGAFAR ELS MÚLTIPLES DE 2
+00000014  43F9 00000026             20              LEA     .GAPPOSITIONS,A1
+0000001A  3171 0000 0002            21              MOVE.W  (A1,D0),2(A0)         ; POSEM DE LA POSICIÓ ALEATORIA DINS GAPPOSY
+00000020  4CDF 0201                 22              MOVEM.L (A7)+,D0/A1
+00000024                            23              
+00000024  4E75                      24              RTS
+00000026                            25              
+00000026                            26              
+Line 27 ERROR: Undefined symbol
+00000026= F7F8                      27  .GAPPOSITIONS   DC.W    SCRHEIGH/2             ;0
+Line 28 ERROR: Undefined symbol
+00000028= F7F8                      28                  DC.W    SCRHEIGH/4             ;2
+Line 29 ERROR: Undefined symbol
+0000002A= F7F8                      29                  DC.W    SCRHEIGH-SCRHEIGH/4    ;4    
+Line 30 ERROR: Undefined symbol
+0000002C= F7F8                      30                  DC.W    COLGAP                 ;6    
+Line 31 ERROR: Undefined symbol
+0000002E= F7F8                      31                  DC.W    SCRHEIGH-COLGAP        ;8
+Line 32 ERROR: Undefined symbol
+00000030= F7F8                      32                  DC.W    SCRHEIGH-COLGAP/2      ;10
+Line 33 ERROR: Undefined symbol
+00000032= F7F8                      33                  DC.W    COLGAP/2               ;12    
+00000034                            34  
+00000034                            35  
+00000034                            36              
+00000034                            37  ; ------------------------------------------------------------------------------
+00000034                            38  COLUPD
+00000034                            39  ; UPDATES THE COLUMN.
+00000034                            40  ; INPUT    : A0 POINTER TO THE INSTANCE VARIABLES
+00000034                            41  ; OUTPUT   : NONE
+00000034                            42  ; MODIFIES : NONE
+00000034                            43  ; ------------------------------------------------------------------------------
+00000034                            44  
+00000034  48E7 FF00                 45              MOVEM.L  D0-D7,-(A7)
+00000038                            46              ; UPDATE COLUMN COORDINATES
+00000038  3010                      47              MOVE.W  (A0),D0
+Line 48 ERROR: Undefined symbol
+0000003A  0440 BD16                 48              SUB.W   #COLSPEED,D0
+0000003E                            49              
+0000003E                            50              ; CHECK HORIZONTAL COLLISIONS (LEFT SIDE OF THE SCREEN)
+Line 51 ERROR: Comma expected
+0000003E                            51              CMP.W   #-COLWIDTH/2,D0
+0000003E  6D00 000A                 52              BLT     .COLLFT
+00000042  6000 0014                 53              BRA     .CHKBEE
+Line 54 ERROR: Symbol value differs between first and second pass
+00000046                            54  .COLLFT     ; LEFT SIDE COLLISION
+Line 55 ERROR: Undefined symbol
+00000046  4EB9 004DBD16             55              JSR     AGLKILL             ; ELIMINAM LA COLUMNA
+0000004C  6000 0010                 56              BRA     .DONE
+00000050                            57              
+Line 58 ERROR: Undefined symbol
+00000050  323C BD16                 58              MOVE.W  #COLWIDTH,D1
+Line 59 ERROR: Symbol value differs between first and second pass
+00000054                            59  .CHKBEE     JSR     AGLCOLLISION
+00000054                            60             
+00000054                            61  *******************************************************************************
+00000054                            62  *            ;CHECK BEE COLLISIONS
+00000054                            63  *.CHKBEE                    
+00000054                            64  *            MOVE.W  #BEEPOSX,D2
+00000054                            65  *            MOVE.W  (A0),D3
+00000054                            66  *            SUB.W   D3,D2
+00000054                            67  *            BPL     .ISPOS
+00000054                            68  *            NEG.W   D2
+00000054                            69  *            
+00000054                            70  *.ISPOS      ;AQUÍ YA TENIM LA POSICIÓ EN VALOR ABSOLUT
+00000054                            71  *            CMP.W   #BEEWIDTH/2+COLWIDTH/2,D2
+00000054                            72  *            BGT     .DONE   ;NO HAY COLISION
+00000054                            73  *            
+00000054                            74  *            MOVE.W  #COLWIDTH/2,D5
+00000054                            75  *            ADD.W   (A0),D5
+00000054                            76  *            CMP.W   #BEEPOSX,D5
+00000054                            77  *            BNE     .CONT
+00000054                            78  *            ;AÑADIMOS AUGMENTO DE NIVEL:
+00000054                            79  *            ADDQ.W   #1,(LEVEL)
+00000054                            80  *.CONT           
+00000054                            81  *            ;COMPROVAMOS LA COORDENADA Y
+00000054                            82  *            MOVE.W  (BEEPOSY),D2
+00000054                            83  *            MOVE.W  2(A0),D3
+00000054                            84  *            SUB.W   D3,D2
+00000054                            85  *            BPL     .ISPOS2
+00000054                            86  *            NEG     D2
+00000054                            87  *            
+00000054                            88  *.ISPOS2     CMP.W   #BEEHEIGH/2+COLGAP/2,D2
+00000054                            89  *            BLT     .DONE
+00000054                            90  *            
+00000054                            91  *            ;BEE COLLISION:
+00000054                            92  *            MOVE.W  #SCRHEIGH/2,D1
+00000054                            93  *            JSR     COLINIT
+00000054                            94  *            ADDQ.W  #1,(COLLISIONS)
+00000054                            95  *                
+00000054                            96  *            MOVE.W  D1,(BEEPOSY)    ;UPDATE POSITION OF BEE
+00000054                            97  *            
+00000054                            98  *             ***********
+00000054                            99  *            MOVE.B #SNDHIT,D7       ;COLLISION SOUND
+00000054                           100  *            TRAP   #SNDPLTN
+00000054                           101              
+00000054                           102            
+00000054                           103  
+00000054                           104              ; STORE POSITION
+Line 105 ERROR: Symbol value differs between first and second pass
+00000054                           105  .DONE       
+00000054                           106  
+00000054  3080                     107              MOVE.W  D0,(A0)
+00000056  4CDF 00FF                108              MOVEM.L  (A7)+,D0-D7
+0000005A                           109              
+0000005A  4E75                     110              RTS
+0000005C                           111              
+0000005C                           112  ; ------------------------------------------------------------------------------
+Line 113 ERROR: Symbol value differs between first and second pass
+0000005C                           113  COLPLOT
+0000005C                           114  ; PLOT THE COLUMN.
+0000005C                           115  ; INPUT    : A0 POINTER TO THE INSTANCE VARIABLES
+0000005C                           116  ; OUTPUT   : NONE
+0000005C                           117  ; MODIFIES : NONE
+0000005C                           118  ; ------------------------------------------------------------------------------
+0000005C                           119  
+0000005C  48E7 F800                120              MOVEM.L D0-D4,-(A7)
+00000060                           121               ;1ER DEFINIM ELS COLORS:
+00000060                           122              ;CONTOUR COLOR
+00000060  103C 0050                123              MOVE.B  #80,D0
+Line 124 ERROR: Undefined symbol
+00000064  223C 004DBD16            124              MOVE.L  #COLPCOL,D1
+0000006A  4E4F                     125              TRAP    #15
+0000006C                           126              
+0000006C                           127              ;FILL COLOR
+0000006C  103C 0051                128              MOVE.B  #81,D0
+Line 129 ERROR: Undefined symbol
+00000070  223C 004DBD16            129              MOVE.L  #COLFCOL,D1
+00000076  4E4F                     130              TRAP    #15
+00000078                           131              
+00000078                           132              
+00000078                           133              ; FIRST PART OF THE COLUMN: 
+00000078                           134              ; DEFINE COORDINATES:
+00000078  3210                     135              MOVE.W  (A0),D1
+Line 136 ERROR: Comma expected
+0000007A                           136              SUB.W   #COLWIDTH/2,D1
+0000007A  3610                     137              MOVE.W  (A0),D3
+Line 138 ERROR: Comma expected
+0000007C                           138              ADD.W   #COLWIDTH/2,D3
+0000007C                           139              
+Line 140 ERROR: Undefined symbol
+0000007C  343C BD16                140              MOVE.W  #COLPOSY,D2
+00000080                           141              ;MOVE.W  #SCRHEIGH/2-COLGAP/2,D4 *************
+00000080  3828 0002                142              MOVE.W  2(A0),D4
+Line 143 ERROR: Comma expected
+00000084                           143              SUB.W   #COLGAP/2,D4
+00000084                           144  
+00000084                           145              
+00000084  103C 0057                146              MOVE.B  #87,D0
+00000088  4E4F                     147              TRAP    #15
+0000008A                           148    
+0000008A                           149              
+0000008A                           150              ; SECOND PART OF THE COLUMN:
+0000008A                           151              ; ONLY DE Y COORDINATES CHANGE
+0000008A                           152              ;MOVE.W  #SCRHEIGH/2+COLGAP/2,D2 *************
+0000008A  3428 0002                153              MOVE.W  2(A0),D2
+Line 154 ERROR: Comma expected
+0000008E                           154              ADD.W   #COLGAP/2,D2
+Line 155 ERROR: Undefined symbol
+0000008E  383C BD16                155              MOVE.W  #SCRHEIGH,D4
+00000092                           156              
+00000092  4E4F                     157              TRAP    #15
+00000094                           158              
+00000094                           159              ;PEN COLOR
+00000094  103C 0050                160              MOVE.B  #80,D0
+Line 161 ERROR: Undefined symbol
+00000098  223C 004DBD16            161              MOVE.L  #COLDETCOL,D1
+0000009E  4E4F                     162              TRAP    #15
+000000A0                           163              
+000000A0                           164              ;FILL COLOR
+000000A0  103C 0051                165              MOVE.B  #81,D0
+000000A4  4E4F                     166              TRAP    #15
+000000A6                           167         
+000000A6                           168              ;DRAW COLUMN DETAILS
+000000A6                           169              ;FIRST DETAIL
+000000A6  3210                     170              MOVE.W  (A0),D1
+Line 171 ERROR: Comma expected
+000000A8                           171              SUB.W   #COLWIDTH/3,D1
+000000A8  3601                     172              MOVE.W  D1,D3
+000000AA  5643                     173              ADD.W   #3,D3
+000000AC                           174              
+000000AC  343C 0000                175              MOVE.W #0,D2
+000000B0  3828 0002                176              MOVE.W 2(A0),D4
+Line 177 ERROR: Undefined symbol
+000000B4  0444 BD16                177              SUB.W  #COLGAP,D4                   
+000000B8  103C 0057                178              MOVE.B #87,D0
+000000BC  4E4F                     179              TRAP   #15
+000000BE                           180              
+000000BE                           181              ;SECOND DETAIL
+000000BE  3210                     182              MOVE.W  (A0),D1
+Line 183 ERROR: Comma expected
+000000C0                           183              ADD.W   #COLWIDTH/3,D1
+000000C0  3601                     184              MOVE.W  D1,D3
+000000C2  5643                     185              ADD.W   #3,D3
+000000C4                           186              
+000000C4  3428 0002                187              MOVE.W 2(A0),D2     ;TENEMOS LA POSICION CENTRAL DE COLGAP
+Line 188 ERROR: Invalid syntax
+000000C8                           188              SUB.W  #COLGAP*2,D2
+000000C8  3828 0002                189              MOVE.W 2(A0),D4
+Line 190 ERROR: Comma expected
+000000CC                           190              SUB.W  #COLGAP/2,D4                   
+000000CC  103C 0057                191              MOVE.B #87,D0
+000000D0  4E4F                     192              TRAP   #15
+000000D2                           193              
+000000D2                           194              ;THIRD DETAIL
+000000D2  3210                     195              MOVE.W  (A0),D1
+000000D4  3601                     196              MOVE.W  D1,D3
+000000D6  5643                     197              ADD.W   #3,D3
+000000D8                           198              
+000000D8  3428 0002                199              MOVE.W 2(A0),D2     ;TENEMOS LA POSICION CENTRAL DE COLGAP
+Line 200 ERROR: Invalid syntax
+000000DC                           200              SUB.W  #COLGAP*2-COLGAP/4,D2
+000000DC  3828 0002                201              MOVE.W 2(A0),D4
+Line 202 ERROR: Comma expected
+000000E0                           202              SUB.W  #COLGAP-COLGAP/4,D4                   
+000000E0  103C 0057                203              MOVE.B #87,D0
+000000E4  4E4F                     204              TRAP   #15
+000000E6                           205              
+000000E6                           206              
+000000E6                           207              
+000000E6  4CDF 001F                208              MOVEM.L (A7)+,D0-D4
+000000EA                           209              
+000000EA                           210  
+000000EA  4E75                     211              RTS
+000000EC                           212  ;---------------------------------------------------------------------------                  
+Line 213 ERROR: Symbol value differs between first and second pass
+000000EC                           213  DTLSPLOT    ; TODO: HACER UNA RUTINA QUE DIBUJE LOS DETALLES DE LA COLUMNA
+000000EC                           214            ;  LEA     .DETAILS,A1
+000000EC                           215  
+000000EC                           216  
+000000EC  3210                     217              MOVE.W  (A0),D1
+Line 218 ERROR: Comma expected
+000000EE                           218              SUB.W   #COLWIDTH/3,D1
+000000EE  3601                     219              MOVE.W  D1,D3
+000000F0  5643                     220              ADD.W   #3,D3
+000000F2                           221              
+000000F2  343C 0000                222              MOVE.W #0,D2
+000000F6  3828 0002                223              MOVE.W 2(A0),D4
+Line 224 ERROR: Undefined symbol
+000000FA  0444 BD16                224              SUB.W  #COLGAP,D4                   
+000000FE  103C 0057                225              MOVE.B #87,D0
+00000102  4E4F                     226              TRAP   #15
+00000104                           227  
+00000104                           228              
+00000104                           229              
+00000104  4E75                     230              RTS
+00000106                           231              
+00000106                           232  
+00000106                           233  
+00000106                           234  
+00000106                           235  
+00000106                           236  
+00000106                           237  
+00000106                           238  
+00000106                           239  
+00000106                           240  
+00000106                           241  
+00000106                           242  
+00000106                           243  
+00000106                           244  
+00000106                           245  
+Line 246 WARNING: END directive missing, starting address not set
+
+36 errors detected
+1 warning generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+COLINIT             0
+COLINIT:GAPPOSITIONS  26
+COLPLOT             66
+COLUPD              34
+COLUPD:CHKBEE       58
+COLUPD:COLLFT       4A
+COLUPD:DONE         5E
+DTLSPLOT            11E
