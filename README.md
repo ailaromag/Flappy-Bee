@@ -22,7 +22,7 @@ siguiente manera: DC.L $000000,$000000,$000000,$000000,$000000,$000000,$000000,$
 Estos Longs conforman cada color de cada bit. Luego en el Easy68k en la rutina MAPPLOT iteramos por el array de Longs mientras que 
 llamamos a las subrutinas del TRAP #15 correspondientes a poner un color y dibujar un cuadrado. Las imágenes se han procesado como 
 Bitmaps ya que las hemos creado en el paint y nos resultaba más fácil comprender así como se transformaba la imagen en la lista de Longs, 
-pero el programa hecho en Netbeans llamado BitmapConverter2.java fácilmente podría ser modificado por funciona con otros formatos de 
+pero el programa hecho en Netbeans llamado BitmapConverter2.java fácilmente podría ser modificado para funcionar con otros formatos de 
 imágenes.
 
 Implementación del ratón; La realizamos en en su caso. X68 en las rutinas de MSEINIT y MSEUPD. En MSEINIT inicializamos el IRQ del ratón, 
