@@ -5,7 +5,6 @@ Esta práctica trata de una implementación del juego popular del Flappy Bird co
 Tabla de puntos/vidas:
 
                   POINTS   LIFES 
-
 LIFES START         /        3
 SPIDER DAMAGE     -200      -1
 COLUMN DAMAGE     DEATH    DEATH
